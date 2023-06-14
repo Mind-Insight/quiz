@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="post" action="{% url 'main:quiz_result' pk=quiz.id %}">
+  {% csrf_token %}
+  <h2>{{ quiz.question_1 }}</h2>
+  <input type="text" name="{{ quiz.question_1 }}">
+  <hr>
+
+  <h2>{{ quiz.question_2 }}</h2>
+  <input type="text" name="{{ quiz.question_2 }}">
+  <hr>
+  <h2>{{ quiz.question_3 }}</h2>
+  <input type="text" name="{{ quiz.question_3 }}">
+  <hr>
+  <h2>{{ quiz.question_4 }}</h2>
+  <input type="text" name="{{ quiz.question_4 }}">
+  <hr>
+  <h2>{{ quiz.question_5 }}</h2>
+  <input type="text" name="{{ quiz.question_5 }}">
+  <hr>
+  <button type="submit">Отправить</button>
+</form>
+{% endblock content %}

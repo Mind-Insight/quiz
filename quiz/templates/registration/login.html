@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load django_bootstrap5 %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 40vh;">
+  <div class="card" style="width: 30rem;">
+    <div class="card-header">Войти в систему</div>
+    <div class="card-body">
+      <form method="post"  action="{% url 'login' %}">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="hidden" name="next" value="{{ next }}">
+        {% bootstrap_button button_type="submit" content="Войти" %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
