@@ -3,6 +3,7 @@ from django.urls import reverse
 
 
 class Quiz(models.Model):
+    is_active = models.BooleanField(default=True)
     title = models.CharField(max_length=255)
     question_1 = models.CharField(max_length=100)
     answer_1 = models.CharField(max_length=100)

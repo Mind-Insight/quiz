@@ -1,65 +1,60 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="height: 3vh;">
-  <a href="{% url 'main:create_quiz' %}" class="btn btn-warning text-center btn-lg">Создать тест</a>
-</div>
-
+  <div class="container d-flex justify-content-center align-items-center"
+       style="height: 3vh">
+    <a href="{% url 'main:create_quiz' %}"
+       class="btn btn-warning text-center btn-lg">Создать тест</a>
+  </div>
   <h2>Мои Тесты</h2>
   <ul>
     {% for quiz in quizzes %}
-      <li><a href="{% url 'main:quiz_detail' quiz.id %}" class="btn btn-info btn-lg">{{ quiz.title }}</a></li>
-      <hr>
+      <li style="margin-bottom: 70px;">
+        <hr>
+        <a href="{% url 'main:quiz_detail' quiz.id %}"
+           class="btn btn-info btn-lg">{{ quiz.title }}</a>
+        {% if user.is_superuser %}
+          <a href="{% url 'main:edit_quiz' quiz.id %}" class="btn btn-secondary">Редактировать</a>
+          <a href="{% url 'main:delete_quiz' quiz.id %}" class="btn btn-danger">Удалить</a>
+        {% endif %}
+        <h4 style="margin-top:10px;">created by {{ user.username }}</h4>
+        <hr>
+      </li>
     {% empty %}
       <li>Вы еще не создали ни одного теста.</li>
     {% endfor %}
   </ul>
-
-
   {% if page_obj.has_other_pages %}
-  <nav class="my-5">
-    <ul class="pagination">
-      <!-- Если существует предыдущая страница
-           (если мы не на первой странице)
-           рисуем кнопку "Первая страница"... -->
-      {% if page_obj.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?page=1">Первая</a>
-        </li>
-        <!-- ...и кнопку "Предыдущая" -->
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-        </li>
-      {% endif %}
-      <!-- Перебираем в цикле все номера страниц -->
-      {% for i in page_obj.paginator.page_range %}
-        <!-- Если номер страницы совпадает с i... -->
-        {% if page_obj.number == i %}
-          <!-- ..."подсвечиваем" кнопку: ставим класс "active"
-               и делаем не ссылку, а span (просто текстовый блок) -->
-          <li class="page-item active">
-            <span class="page-link">{{ i }}</span>
-          </li>
-        {% else %}
-          <!-- Остальные кнопки отрисовываем без подсветки, со ссылками -->
+    <nav class="my-5">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            <a class="page-link" href="?page=1">Первая</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
           </li>
         {% endif %}
-      {% endfor %}
-      {% if page_obj.has_next %}
-        <!-- Если существует следующая страница
-           (если мы не на последней странице)
-           рисуем кнопку "Следующая"... -->
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
-        </li>
-        <!-- ...и кнопку "Последняя" -->
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
-        </li>
-      {% endif %}
-    </ul>
-  </nav>
-{% endif %}
+        {% for i in page_obj.paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="page-item active">
+              <span class="page-link">{{ i }}</span>
+            </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
 {% endblock content %}

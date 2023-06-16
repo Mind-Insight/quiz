@@ -1,9 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    DetailView,
+    UpdateView,
+    DeleteView,
+)
 
-from .forms import QuizForm
+from .forms import QuizForm, QuizFormAdmin
 from .models import Quiz
 
 
@@ -11,9 +17,27 @@ class QuizListView(LoginRequiredMixin, ListView):
     model = Quiz
     ordering = "id"
     paginate_by = 5
-    queryset = Quiz.objects.all()
     context_object_name = "quizzes"
     template_name = "main/index.html"
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            queryset = Quiz.objects.all()
+        else:
+            queryset = Quiz.objects.filter(is_active=True)
+        return queryset
+
+
+class QuizDeleteView(LoginRequiredMixin, DeleteView):
+    model = Quiz
+    template_name = 'main/confirm_delete.html'
+    success_url = reverse_lazy("main:index")
+
+
+class QuizUpdateView(LoginRequiredMixin, UpdateView):
+    model = Quiz
+    form_class = QuizFormAdmin
+    template_name = "main/edit_quiz.html"
 
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
