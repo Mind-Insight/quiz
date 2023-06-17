@@ -9,7 +9,7 @@ from django.views.generic import (
     DeleteView,
 )
 
-from .forms import QuizForm, QuizFormAdmin
+from .forms import QuizFormAdmin
 from .models import Quiz
 
 
@@ -27,10 +27,15 @@ class QuizListView(LoginRequiredMixin, ListView):
             queryset = Quiz.objects.filter(is_active=True)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["pass_users"] = Quiz.objects.filter(score=5).count()
+        return context
+
 
 class QuizDeleteView(LoginRequiredMixin, DeleteView):
     model = Quiz
-    template_name = 'main/confirm_delete.html'
+    template_name = "main/confirm_delete.html"
     success_url = reverse_lazy("main:index")
 
 
@@ -42,7 +47,7 @@ class QuizUpdateView(LoginRequiredMixin, UpdateView):
 
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
-    form_class = QuizForm
+    form_class = QuizFormAdmin
     template_name = "main/create_quiz.html"
 
     def form_valid(self, form):
@@ -64,21 +69,39 @@ class QuizDetailView(LoginRequiredMixin, DetailView):
 
 
 def quiz_result(request, pk):
-    correct_answer = 0
     quiz = Quiz.objects.get(pk=pk)
-    user_answers = list(request.POST.dict().values())
-    if quiz.answer_1 == user_answers[1]:
-        correct_answer += 1
-    if quiz.answer_2 == user_answers[2]:
-        correct_answer += 1
-    if quiz.answer_3 == user_answers[3]:
-        correct_answer += 1
-    if quiz.answer_4 == user_answers[4]:
-        correct_answer += 1
-    if quiz.answer_5 == user_answers[5]:
-        correct_answer += 1
+    answers = []
+    score = 0
+    correct = []
+    for i in range(1, 6):
+        answer = request.POST.get(f"question_{i}")
+        answers.append(answer)
+    if not answers:
+        score = 0
+    else:
+        correct.append(quiz.correct_answer1)
+        correct.append(quiz.correct_answer2)
+        correct.append(quiz.correct_answer3)
+        correct.append(quiz.correct_answer4)
+        correct.append(quiz.correct_answer5)
+        if quiz.correct_answer1 == answers[0]:
+            score += 1
+        if quiz.correct_answer2 == answers[1]:
+            score += 1
+        if quiz.correct_answer3 == answers[2]:
+            score += 1
+        if quiz.correct_answer4 == answers[3]:
+            score += 1
+        if quiz.correct_answer5 == answers[4]:
+            score += 1
+
+    quiz.score = score
+    quiz.save()
     return render(
         request,
         "main/quiz_result.html",
-        {"correct_answers": correct_answer},
+        {
+            "correct_answers": score,
+            "answers": correct,
+        },
     )

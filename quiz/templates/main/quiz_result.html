@@ -8,4 +8,11 @@
       <div class="display-1">{{ correct_answers }}</div>
     </div>
   </div>
+  <div>
+    <hr>
+    <h3>Правильные ответы</h3>
+    {% for answer in answers %}
+      <p style="font-size: 24px;">{{ forloop.counter }}: {{answer}}</p>
+    {% endfor %}
+  </div>
 {% endblock content %}

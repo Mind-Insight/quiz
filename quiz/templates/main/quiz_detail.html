@@ -1,25 +1,65 @@
 {% extends 'base.html' %}
-
 {% block content %}
-
-<form method="post" action="{% url 'main:quiz_result' pk=quiz.id %}">
-  {% csrf_token %}
-  <h2>{{ quiz.question_1 }}</h2>
-  <input type="text" name="{{ quiz.question_1 }}">
-  <hr>
-
-  <h2>{{ quiz.question_2 }}</h2>
-  <input type="text" name="{{ quiz.question_2 }}">
-  <hr>
-  <h2>{{ quiz.question_3 }}</h2>
-  <input type="text" name="{{ quiz.question_3 }}">
-  <hr>
-  <h2>{{ quiz.question_4 }}</h2>
-  <input type="text" name="{{ quiz.question_4 }}">
-  <hr>
-  <h2>{{ quiz.question_5 }}</h2>
-  <input type="text" name="{{ quiz.question_5 }}">
-  <hr>
-  <button type="submit">Отправить</button>
-</form>
+  <div class="container">
+    <h1 class="my-4">Пройдите тест</h1>
+    <form action="{% url 'main:quiz_result' pk=quiz.id %}" method="post">
+      {% csrf_token %}
+      <div>
+        <label for="question_1">{{ quiz.question_1 }}:</label>
+        <select id="question_1" name="question_1">
+          <option value="">Выберите ответ</option>
+          <option value="{{ quiz.answer1_1 }}">{{ quiz.answer1_1 }}</option>
+          <option value="{{ quiz.answer1_2 }}">{{ quiz.answer1_2 }}</option>
+          <option value="{{ quiz.answer1_3 }}">{{ quiz.answer1_3 }}</option>
+          <option value="{{ quiz.answer1_4 }}">{{ quiz.answer1_4 }}</option>
+        </select>
+      </div>
+      <hr>
+      <div>
+        <label for="question_2">{{ quiz.question_2 }}:</label>
+        <select id="question_2" name="question_2">
+          <option value="">Выберите ответ</option>
+          <option value="{{ quiz.answer2_1 }}">{{ quiz.answer2_1 }}</option>
+          <option value="{{ quiz.answer2_2 }}">{{ quiz.answer2_2 }}</option>
+          <option value="{{ quiz.answer2_3 }}">{{ quiz.answer2_3 }}</option>
+          <option value="{{ quiz.answer2_4 }}">{{ quiz.answer2_4 }}</option>
+        </select>
+      </div>
+      <hr>
+      <div>
+        <label for="question_3">{{ quiz.question_3 }}:</label>
+        <select id="question_3" name="question_3">
+          <option value="">Выберите ответ</option>
+          <option value="{{ quiz.answer3_1 }}">{{ quiz.answer3_1 }}</option>
+          <option value="{{ quiz.answer3_2 }}">{{ quiz.answer3_2 }}</option>
+          <option value="{{ quiz.answer3_3 }}">{{ quiz.answer3_3 }}</option>
+          <option value="{{ quiz.answer3_4 }}">{{ quiz.answer3_4 }}</option>
+        </select>
+      </div>
+      <hr>
+      <div>
+        <label for="question_4">{{ quiz.question_4 }}:</label>
+        <select id="question_4" name="question_4">
+          <option value="">Выберите ответ</option>
+          <option value="{{ quiz.answer4_1 }}">{{ quiz.answer4_1 }}</option>
+          <option value="{{ quiz.answer4_2 }}">{{ quiz.answer4_2 }}</option>
+          <option value="{{ quiz.answer4_3 }}">{{ quiz.answer4_3 }}</option>
+          <option value="{{ quiz.answer4_4 }}">{{ quiz.answer4_4 }}</option>
+        </select>
+      </div>
+      <hr>
+      <div>
+        <label for="question_5">{{ quiz.question_5 }}:</label>
+        <select id="question_5" name="question_5">
+          <option value="">Выберите ответ</option>
+          <option value="{{ quiz.answer5_1 }}">{{ quiz.answer5_1 }}</option>
+          <option value="{{ quiz.answer5_2 }}">{{ quiz.answer5_2 }}</option>
+          <option value="{{ quiz.answer5_3 }}">{{ quiz.answer5_3 }}</option>
+          <option value="{{ quiz.answer5_4 }}">{{ quiz.answer5_4 }}</option>
+        </select>
+      </div>
+      <hr>
+      <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+  </div>
 {% endblock content %}

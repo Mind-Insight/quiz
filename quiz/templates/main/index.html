@@ -16,8 +16,11 @@
         {% if user.is_superuser %}
           <a href="{% url 'main:edit_quiz' quiz.id %}" class="btn btn-secondary">Редактировать</a>
           <a href="{% url 'main:delete_quiz' quiz.id %}" class="btn btn-danger">Удалить</a>
+          <div>
+            <h5>Количество сдавших тест на отлично: {% if pass_users != 1 %} 1 {% else %} 0 {% endif %} </h5>
+          </div>
         {% endif %}
-        <h4 style="margin-top:10px;">created by {{ user.username }}</h4>
+        <h4 style="margin-top:10px;">created by {{ quiz.user.username }}</h4>
         <hr>
       </li>
     {% empty %}
